@@ -79,13 +79,19 @@ public class FilmServer {
     static volatile String sonMesaj = "";
 
     public static void main(String[] args) throws IOException {
-        int port = args.length > 0 ? Integer.parseInt(args[0]) : 8080;
-        HttpServer server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), port), 0);
+        int port = 8080;
+        if (System.getenv("PORT") != null) {
+            port = Integer.parseInt(System.getenv("PORT"));
+        } else if (args.length > 0) {
+            port = Integer.parseInt(args[0]);
+        }
+        
+        // InetSocketAddress(port) varsayılan olarak tüm arayüzleri (0.0.0.0) dinler. Bulut için bu gereklidir.
+        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", FilmServer::isle);
         server.setExecutor(Executors.newCachedThreadPool());
         server.start();
-        System.out.println("Film Bilgi Sistemi web arayüzü çalışıyor: http://localhost:" + port);
-        System.out.println("Durdurmak için Ctrl+C");
+        System.out.println("Film Bilgi Sistemi web arayüzü çalışıyor. Port: " + port);
     }
 
     // ------------------------------------------------------------------ yönlendirme

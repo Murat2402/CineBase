@@ -1,0 +1,4 @@
+*.class
+temp_*
+log.txt
+.vscode/
