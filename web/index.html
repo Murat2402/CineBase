@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Film Bilgi Sistemi | Hızlı & Gelişmiş</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+  <!-- GİRİŞ EKRANI -->
+  <div id="login-screen" class="screen">
+    <div class="login-card premium-panel fade-in">
+      <div class="logo">
+        <i class="bi bi-film text-gradient"></i>
+        <h2 class="text-gradient">CineBase</h2>
+      </div>
+      <p class="subtitle">Film arşivinize hoş geldiniz</p>
+      
+      <form id="login-form">
+        <div class="input-group">
+          <label for="username"><i class="bi bi-person"></i> Kullanıcı Adı</label>
+          <input type="text" id="username" placeholder="murat" required autocomplete="username">
+        </div>
+        <div class="input-group">
+          <label for="password"><i class="bi bi-lock"></i> Şifre</label>
+          <input type="password" id="password" placeholder="••••" required autocomplete="current-password">
+        </div>
+        <div id="login-error" class="error-msg"></div>
+        <button type="submit" id="btn-login" class="btn btn-primary">Giriş Yap <i class="bi bi-arrow-right"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ANA UYGULAMA EKRANI -->
+  <div id="app-screen" class="screen hidden">
+    <!-- Üst Bar -->
+    <header class="navbar premium-panel" style="border-top: none; border-left: none; border-right: none; border-radius: 0;">
+      <div class="nav-brand">
+        <i class="bi bi-film text-gradient" style="font-size: 1.5rem;"></i>
+        <span class="brand-title text-gradient">CineBase</span>
+      </div>
+      <div class="nav-actions">
+        <div class="user-badge">
+          <img src="https://ui-avatars.com/api/?name=Murat&background=8b5cf6&color=fff&rounded=true&size=32" alt="Avatar" class="avatar">
+          <span>Murat</span>
+        </div>
+        <button id="btn-logout" class="btn btn-outline btn-sm"><i class="bi bi-box-arrow-right"></i> Çıkış</button>
+      </div>
+    </header>
+
+    <!-- Ana Gövde -->
+    <main class="container">
+      
+      <!-- İstatistik Dashboard -->
+      <section class="dashboard fade-in">
+        <div class="stat-card premium-panel">
+          <div class="stat-icon" style="color: #3b82f6;"><i class="bi bi-collection-play"></i></div>
+          <div class="stat-info">
+            <h3>Kütüphanedeki Filmler</h3>
+            <p id="dash-total">0</p>
+          </div>
+        </div>
+        <div class="stat-card premium-panel">
+          <div class="stat-icon" style="color: #ef4444;"><i class="bi bi-heart-fill"></i></div>
+          <div class="stat-info">
+            <h3>Favorilerim</h3>
+            <p id="dash-favs">0</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Eylem Çubuğu -->
+      <section class="action-bar premium-panel fade-in">
+        <div class="search-filters">
+          <div class="search-wrapper">
+            <i class="bi bi-search"></i>
+            <input type="text" id="search-input" placeholder="Film adı veya yönetmen...">
+          </div>
+          <select id="filter-type" class="premium-input">
+            <option value="all">Tüm Filmler</option>
+            <option value="imdb8">⭐ IMDb 8.0+</option>
+            <option value="favorites">❤️ Favoriler</option>
+            <option value="hasPoster">🖼️ Posteri Olanlar</option>
+            <option value="noPoster">🚫 Posteri Olmayanlar</option>
+          </select>
+          <select id="filter-decade" class="premium-input">
+            <option value="all">Tüm Yıllar</option>
+            <option value="2020">2020'ler (2020-2029)</option>
+            <option value="2010">2010'lar (2010-2019)</option>
+            <option value="2000">2000'ler (2000-2009)</option>
+            <option value="1990">1990'lar (1990-1999)</option>
+            <option value="old">1990 Öncesi</option>
+          </select>
+          <select id="sort-type" class="premium-input">
+            <option value="default">Sıralama: Eklenme Sırası</option>
+            <option value="yearDesc">Yıl: En Yeni</option>
+            <option value="yearAsc">Yıl: En Eski</option>
+            <option value="imdbDesc">IMDb: Yüksekten Düşüğe</option>
+            <option value="imdbAsc">IMDb: Düşükten Yükseğe</option>
+            <option value="runtimeDesc">Süre: En Uzun</option>
+            <option value="runtimeAsc">Süre: En Kısa</option>
+            <option value="titleAsc">İsim: A-Z</option>
+          </select>
+          <input type="text" id="genre-filter" placeholder="Tür (örn: Action)" class="premium-input" style="width: 140px;">
+        </div>
+        <div class="btn-group-actions">
+          <button id="btn-fetch-api" class="btn btn-accent">
+            <i class="bi bi-cloud-download"></i> API'den Veri Çek
+          </button>
+        </div>
+      </section>
+
+      <!-- İlerleme Bildirimi -->
+      <div id="status-banner" class="status-banner hidden premium-panel">
+        <div class="spinner"></div>
+        <span id="status-text">Veriler çekiliyor...</span>
+      </div>
+
+      <!-- Film Listesi Grid -->
+      <section id="films-grid" class="films-grid fade-in">
+        <!-- Javascript dinamik olarak film kartlarını dolduracak -->
+      </section>
+
+      <!-- Boş Durum Bildirimi -->
+      <div id="empty-state" class="empty-state hidden fade-in">
+        <i class="bi bi-film" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem; display: block;"></i>
+        <h2>Gösterilecek film bulunamadı</h2>
+        <p>Arama kriterlerinizi değiştirin veya "API'den Veri Çek" butonuna basın.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- DÜZENLEME MODAL (POPUP) -->
+  <div id="edit-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title"><i class="bi bi-pencil-square"></i> Filmi Düzenle</h3>
+        <button id="btn-close-modal" class="btn-close"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" id="edit-old-title">
+        <div class="input-group">
+          <label>Film Adı</label>
+          <input type="text" id="edit-title" class="premium-input" required>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Yıl</label>
+            <input type="text" id="edit-year" class="premium-input" required>
+          </div>
+          <div class="input-group">
+            <label>IMDb Puanı</label>
+            <input type="number" step="0.1" min="0" max="10" id="edit-imdb" class="premium-input" required>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Tür</label>
+          <input type="text" id="edit-genre" class="premium-input" required>
+        </div>
+        <div class="input-row">
+          <div class="input-group">
+            <label>Süre</label>
+            <input type="text" id="edit-runtime" class="premium-input">
+          </div>
+          <div class="input-group">
+            <label>Yönetmen</label>
+            <input type="text" id="edit-director" class="premium-input">
+          </div>
+        </div>
+        <div id="edit-error" class="error-msg"></div>
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-modal" class="btn btn-secondary">İptal</button>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
